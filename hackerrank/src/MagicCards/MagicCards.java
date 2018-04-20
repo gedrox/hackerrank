@@ -51,84 +51,92 @@ public class MagicCards {
                 qSolve.add(queries[q_i]);
             }
         }
+
+        for (int start = 0; start < n; start++) {
+            for (int len = 1; len <= 20; len++) {
+                
+            }
+        }
         
-        qSolve.sort(Comparator.<Query, Integer>comparing(Q -> Q.l).thenComparing(Q -> Q.r));
-        State prevState = null;     
-        
-        for (Query Q : qSolve) {
+        if (false) {
+            qSolve.sort(Comparator.<Query, Integer>comparing(Q -> Q.l).thenComparing(Q -> Q.r));
+            State prevState = null;     
             
-            int[] hash;
-
-            if (prevState == null || Q.l > prevState.l) {
-                hash = new int[m];
-
-                int bit = 1;
-                for (int x = Q.l; x <= Q.r; x++) {
-                    for (int y = 0; y < m; y++) {
-                        if (side[x][y]) {
-                            hash[y] += bit;
-                        }
-                    }
-                    bit <<= 1;
-                }
+            for (Query Q : qSolve) {
                 
-                prevState = new State();
-                prevState.l = Q.l;
-                prevState.r = Q.r;
-                prevState.bit = bit;
-                prevState.hash = hash;
-                
-            } else {
-
-                hash = prevState.hash;
-                
-                if (prevState.l < Q.l) {
-                    prevState.bit >>= Q.l - prevState.l;
-                    for (int i = 0; i < hash.length; i++) {
-                        hash[i] >>= Q.l - prevState.l;
-                    }
-                }
-                
-                if (prevState.r < Q.r) {
-                    for (int x = prevState.r + 1; x <= Q.r; x++) {
+                int[] hash;
+    
+                if (prevState == null || Q.l > prevState.l) {
+                    hash = new int[m];
+    
+                    int bit = 1;
+                    for (int x = Q.l; x <= Q.r; x++) {
                         for (int y = 0; y < m; y++) {
                             if (side[x][y]) {
-                                hash[y] += prevState.bit;
+                                hash[y] += bit;
                             }
                         }
-                        prevState.bit <<= 1;
+                        bit <<= 1;
                     }
+                    
+                    prevState = new State();
+                    prevState.l = Q.l;
+                    prevState.r = Q.r;
+                    prevState.bit = bit;
+                    prevState.hash = hash;
+                    
+                } else {
+    
+                    hash = prevState.hash;
+                    
+                    if (prevState.l < Q.l) {
+                        prevState.bit >>= Q.l - prevState.l;
+                        for (int i = 0; i < hash.length; i++) {
+                            hash[i] >>= Q.l - prevState.l;
+                        }
+                    }
+                    
+                    if (prevState.r < Q.r) {
+                        for (int x = prevState.r + 1; x <= Q.r; x++) {
+                            for (int y = 0; y < m; y++) {
+                                if (side[x][y]) {
+                                    hash[y] += prevState.bit;
+                                }
+                            }
+                            prevState.bit <<= 1;
+                        }
+                    }
+                    
+                    if (prevState.r > Q.r) {
+                        prevState.bit >>= prevState.r - Q.r;
+                        for (int i = 0; i < hash.length; i++) {
+                            hash[i] &= prevState.bit - 1;
+                        }
+                    }
+                    
+                    prevState.l = Q.l;
+                    prevState.r = Q.r;
                 }
                 
-                if (prevState.r > Q.r) {
-                    prevState.bit >>= prevState.r - Q.r;
-                    for (int i = 0; i < hash.length; i++) {
-                        hash[i] &= prevState.bit - 1;
+                int newM = 1 << (Q.r - Q.l + 1);
+                long[] cnt = new long[newM];
+                for (int y = 0; y < hash.length; y++) {
+                    cnt[hash[y]] += SQ[y + 1];
+                }
+                long min = allSum;
+                for (long l : cnt) {
+                    if (l < min) {
+                        min = l;
+                        if (min == 0) break;
                     }
                 }
-                
-                prevState.l = Q.l;
-                prevState.r = Q.r;
+    
+                Q.answer = allSum - min;
             }
-            
-            int newM = 1 << (Q.r - Q.l + 1);
-            long[] cnt = new long[newM];
-            for (int y = 0; y < hash.length; y++) {
-                cnt[hash[y]] += SQ[y + 1];
+    
+            for (Query query : queries) {
+                sb.append(query.answer).append("\n");
             }
-            long min = allSum;
-            for (long l : cnt) {
-                if (l < min) {
-                    min = l;
-                    if (min == 0) break;
-                }
-            }
-
-            Q.answer = allSum - min;
-        }
-
-        for (Query query : queries) {
-            sb.append(query.answer).append("\n");
         }
         
         System.out.print(sb);

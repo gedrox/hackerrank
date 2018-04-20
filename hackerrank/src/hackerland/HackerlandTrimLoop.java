@@ -1,6 +1,5 @@
 package hackerland;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.testng.Assert;
 
@@ -363,7 +362,6 @@ public class HackerlandTrimLoop {
         }
     }
 
-    @NotNull
     private StringBuilder createTestCase(Random r, int n, int m, int q1, int q2) {
         int q = q1 + q2;
 

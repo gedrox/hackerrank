@@ -1,6 +1,5 @@
 package MaximumGcdAndSum;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -97,7 +96,6 @@ public class MaximumGcdAndSumSlow {
         System.out.println(res);
     }
 
-    @NotNull
     private static ArrayList<Integer>[] getD() {
         ArrayList<Integer>[] d = new ArrayList[max + 1];
         for (int i = 0; i < d.length; i++) {

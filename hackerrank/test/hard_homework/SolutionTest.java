@@ -39,8 +39,8 @@ public class SolutionTest {
     @Test
     public void testNumbers2() {
         for (int n = 100; n < 1000; n++) {
-//            System.out.println(n + "\t" + Solution.solve(n));
-//            System.out.printf("%.9f, ", Solution.solve(n));
+//            System.out.println(n + "\t" + hackerrank.Solution.solve(n));
+//            System.out.printf("%.9f, ", hackerrank.Solution.solve(n));
             SolutionBeforeCleanup.solve(n);
         }
 
@@ -79,7 +79,7 @@ public class SolutionTest {
     public void test100038() {
         //2.7203299964454435
         assertEquals(2.7203299964454435, Solution.solve(100038), 1e-9/2);
-//        assertEquals(2.7203299964454435, Solution.solve(1500002), 1e-9/2);
+//        assertEquals(2.7203299964454435, hackerrank.Solution.solve(1500002), 1e-9/2);
     }
 
     @Test
